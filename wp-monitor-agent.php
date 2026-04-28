@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WP Monitor Agent
  * Description: Lightweight read-only monitoring agent for WordPress sites.
- * Version: 1.0.3
+ * Version: 1.0.4
  * Author: WP Monitor Agent
  * Text Domain: wp-monitor-agent
  * Requires PHP: 8.0
@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'WP_MONITOR_AGENT_VERSION', '1.0.3' );
+define( 'WP_MONITOR_AGENT_VERSION', '1.0.4' );
 define( 'WP_MONITOR_AGENT_FILE', __FILE__ );
 define( 'WP_MONITOR_AGENT_PATH', plugin_dir_path( __FILE__ ) );
 define( 'WP_MONITOR_AGENT_URL', plugin_dir_url( __FILE__ ) );
@@ -38,6 +38,7 @@ if ( ! defined( 'WP_MONITOR_AGENT_API_TOKEN' ) ) {
 	define( 'WP_MONITOR_AGENT_API_TOKEN', '' );
 }
 
+require_once WP_MONITOR_AGENT_PATH . 'includes/class-wp-monitor-agent-settings.php';
 require_once WP_MONITOR_AGENT_PATH . 'includes/class-wp-monitor-agent-checks.php';
 require_once WP_MONITOR_AGENT_PATH . 'includes/class-wp-monitor-agent-logs.php';
 require_once WP_MONITOR_AGENT_PATH . 'includes/class-wp-monitor-agent-rest-controller.php';
@@ -65,6 +66,10 @@ final class WP_Monitor_Agent {
 
 		if ( is_admin() || wp_doing_cron() ) {
 			WP_Monitor_Agent_Updater::init();
+		}
+
+		if ( is_admin() ) {
+			WP_Monitor_Agent_Settings::init();
 		}
 	}
 

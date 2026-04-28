@@ -48,7 +48,7 @@ Headers de autenticacion soportados:
   "success": true,
   "plugin": {
     "name": "WP Monitor Agent",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "slug": "wp-monitor-agent",
     "update_source": "github"
   },
