@@ -2,8 +2,9 @@
 /**
  * Plugin Name: WP Monitor Agent
  * Description: Lightweight read-only monitoring agent for WordPress sites.
- * Version: 1.0.4
- * Author: WP Monitor Agent
+ * Version: 1.0.5
+ * Author: marcodigital.dev
+ * Author URI: https://marcodigital.dev
  * Text Domain: wp-monitor-agent
  * Requires PHP: 8.0
  */
@@ -12,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'WP_MONITOR_AGENT_VERSION', '1.0.4' );
+define( 'WP_MONITOR_AGENT_VERSION', '1.0.5' );
 define( 'WP_MONITOR_AGENT_FILE', __FILE__ );
 define( 'WP_MONITOR_AGENT_PATH', plugin_dir_path( __FILE__ ) );
 define( 'WP_MONITOR_AGENT_URL', plugin_dir_url( __FILE__ ) );

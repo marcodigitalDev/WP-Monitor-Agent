@@ -13,6 +13,25 @@ class WP_Monitor_Agent_Settings {
 	public static function init(): void {
 		add_action( 'admin_menu', array( __CLASS__, 'add_menu_page' ) );
 		add_action( 'admin_post_wp_monitor_agent_clear_cache', array( __CLASS__, 'handle_clear_cache' ) );
+		add_filter( 'plugin_action_links_' . WP_MONITOR_AGENT_BASENAME, array( __CLASS__, 'add_action_links' ) );
+	}
+
+	/**
+	 * Add Settings link to the plugin action links.
+	 *
+	 * @param array $links Existing action links.
+	 * @return array
+	 */
+	public static function add_action_links( array $links ): array {
+		$settings_link = sprintf(
+			'<a href="%s">%s</a>',
+			esc_url( admin_url( 'plugins.php?page=wp-monitor-agent' ) ),
+			esc_html__( 'Settings', 'wp-monitor-agent' )
+		);
+
+		array_unshift( $links, $settings_link );
+
+		return $links;
 	}
 
 	/**
