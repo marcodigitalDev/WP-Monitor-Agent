@@ -231,7 +231,7 @@ class WP_Monitor_Agent_Updater {
 			}
 		}
 
-		return ! empty( $release['zipball_url'] ) ? esc_url_raw( (string) $release['zipball_url'] ) : '';
+		return '';
 	}
 
 	/**

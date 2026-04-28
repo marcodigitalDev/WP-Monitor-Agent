@@ -71,16 +71,16 @@ El token es opcional para repositorios publicos. Para repositorios privados pued
 1. Actualizar la version en el header del plugin.
 2. Actualizar la constante WP_MONITOR_AGENT_VERSION.
 3. Crear commit.
-4. Crear tag:
+4. Crear y subir tag:
 
 ```bash
 git tag v1.0.1
 git push origin v1.0.1
 ```
 
-1. Crear un GitHub Release con el tag correspondiente.
-2. Adjuntar un asset ZIP llamado wp-monitor-agent.zip.
-3. Si no existe el asset ZIP, el updater usara zipball_url como fallback.
+1. GitHub Actions crea automaticamente el Release.
+2. GitHub Actions adjunta automaticamente el asset wp-monitor-agent.zip.
+3. El updater solo acepta ese asset para garantizar la carpeta wp-monitor-agent.
 4. WordPress detectara la actualizacion desde el panel de Plugins.
 
 ## Seguridad
@@ -100,7 +100,7 @@ git push origin v1.0.1
   "success": true,
   "plugin": {
     "name": "WP Monitor Agent",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "slug": "wp-monitor-agent",
     "update_source": "github"
   },
