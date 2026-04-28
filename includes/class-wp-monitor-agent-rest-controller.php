@@ -52,12 +52,14 @@ class WP_Monitor_Agent_REST_Controller extends WP_REST_Controller {
 	 * @return true|WP_Error
 	 */
 	public function permissions_check( WP_REST_Request $request ) {
-		unset( $request );
+		if ( $this->is_valid_token_request( $request ) ) {
+			return true;
+		}
 
 		if ( ! is_user_logged_in() ) {
 			return new WP_Error(
 				'wp_monitor_agent_unauthorized',
-				sanitize_text_field( __( 'Authentication required.', 'wp-monitor-agent' ) ),
+				sanitize_text_field( __( 'Authentication required. Use Bearer token or a logged-in administrator.', 'wp-monitor-agent' ) ),
 				array( 'status' => 401 )
 			);
 		}
@@ -71,6 +73,69 @@ class WP_Monitor_Agent_REST_Controller extends WP_REST_Controller {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Validate token-based authentication for machine-to-machine requests.
+	 *
+	 * @param WP_REST_Request $request Request.
+	 * @return bool
+	 */
+	private function is_valid_token_request( WP_REST_Request $request ): bool {
+		$configured_token = $this->get_configured_api_token();
+
+		if ( '' === $configured_token ) {
+			return false;
+		}
+
+		$provided_token = $this->extract_request_token( $request );
+
+		if ( '' === $provided_token ) {
+			return false;
+		}
+
+		return hash_equals( $configured_token, $provided_token );
+	}
+
+	/**
+	 * Get API token from constant or option.
+	 *
+	 * @return string
+	 */
+	private function get_configured_api_token(): string {
+		if ( defined( 'WP_MONITOR_AGENT_API_TOKEN' ) && is_string( WP_MONITOR_AGENT_API_TOKEN ) && '' !== WP_MONITOR_AGENT_API_TOKEN ) {
+			return sanitize_text_field( WP_MONITOR_AGENT_API_TOKEN );
+		}
+
+		$option_token = get_option( 'wp_monitor_agent_api_token', '' );
+
+		if ( ! is_string( $option_token ) || '' === $option_token ) {
+			return '';
+		}
+
+		return sanitize_text_field( $option_token );
+	}
+
+	/**
+	 * Extract token from supported headers.
+	 *
+	 * @param WP_REST_Request $request Request.
+	 * @return string
+	 */
+	private function extract_request_token( WP_REST_Request $request ): string {
+		$token = (string) $request->get_header( 'x-wp-monitor-token' );
+
+		if ( '' !== $token ) {
+			return trim( $token );
+		}
+
+		$authorization = (string) $request->get_header( 'authorization' );
+
+		if ( preg_match( '/^Bearer\s+(.+)$/i', $authorization, $matches ) ) {
+			return trim( (string) $matches[1] );
+		}
+
+		return '';
 	}
 
 	/**

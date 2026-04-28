@@ -9,30 +9,37 @@ WP Monitor Agent es un plugin WordPress liviano y de solo lectura que expone un 
 
 ## Autenticacion
 
-1. Crear un usuario administrador dedicado o usar uno existente.
-2. Generar una Application Password desde el perfil del usuario.
-3. Configurar Basic Auth en n8n con usuario y Application Password.
+Flujo recomendado (mas simple para n8n):
 
-El endpoint requiere autenticacion valida y capacidad manage_options.
+1. Activar el plugin.
+2. Obtener el token del plugin desde la opcion wp_monitor_agent_api_token (se genera automaticamente en la activacion) o definir tu propio token en wp-config.php con WP_MONITOR_AGENT_API_TOKEN.
+3. En n8n, enviar ese token en el header Authorization: Bearer TU_TOKEN (o X-WP-Monitor-Token: TU_TOKEN).
+
+Tambien se mantiene compatibilidad con usuarios administradores autenticados (capacidad manage_options).
 
 ## Endpoint REST
 
 Endpoint principal:
 
-GET https://dominio.com/wp-json/wp-monitor-agent/v1/status
+GET <https://dominio.com/wp-json/wp-monitor-agent/v1/status>
 
 Ejemplo con detalle basico:
 
-GET https://dominio.com/wp-json/wp-monitor-agent/v1/status?detail=basic
+GET <https://dominio.com/wp-json/wp-monitor-agent/v1/status?detail=basic>
 
 Ejemplo forzando refresh de updates:
 
-GET https://dominio.com/wp-json/wp-monitor-agent/v1/status?refresh_updates=1
+GET <https://dominio.com/wp-json/wp-monitor-agent/v1/status?refresh_updates=1>
 
 Parametros disponibles:
 
 - detail=basic|full
 - refresh_updates=1
+
+Headers de autenticacion soportados:
+
+- Authorization: Bearer TU_TOKEN
+- X-WP-Monitor-Token: TU_TOKEN
 
 ## Configuracion del actualizador GitHub
 
@@ -54,6 +61,7 @@ define( 'WP_MONITOR_AGENT_GITHUB_OWNER', 'marcodigitalDev' );
 define( 'WP_MONITOR_AGENT_GITHUB_REPO', 'WP-Monitor-Agent' );
 define( 'WP_MONITOR_AGENT_GITHUB_BRANCH', 'main' );
 define( 'WP_MONITOR_AGENT_GITHUB_TOKEN', '' );
+define( 'WP_MONITOR_AGENT_API_TOKEN', 'reemplaza-por-un-token-largo-y-aleatorio' );
 ```
 
 El token es opcional para repositorios publicos. Para repositorios privados puede ser necesario para consultar metadata y descargar el paquete. La constante de branch queda disponible como configuracion futura, aunque el updater actual consulta GitHub Releases y no una rama concreta.
@@ -70,15 +78,16 @@ git tag v1.0.1
 git push origin v1.0.1
 ```
 
-5. Crear un GitHub Release con el tag correspondiente.
-6. Adjuntar un asset ZIP llamado wp-monitor-agent.zip.
-7. Si no existe el asset ZIP, el updater usara zipball_url como fallback.
-8. WordPress detectara la actualizacion desde el panel de Plugins.
+1. Crear un GitHub Release con el tag correspondiente.
+2. Adjuntar un asset ZIP llamado wp-monitor-agent.zip.
+3. Si no existe el asset ZIP, el updater usara zipball_url como fallback.
+4. WordPress detectara la actualizacion desde el panel de Plugins.
 
 ## Seguridad
 
 - El endpoint requiere autenticacion.
-- El usuario debe tener manage_options.
+- Se admite token Bearer dedicado para integraciones maquina a maquina.
+- Se mantiene acceso para administradores autenticados (manage_options).
 - El plugin no expone credenciales ni variables de entorno.
 - El plugin no expone logs completos.
 - El plugin no modifica el sitio.
