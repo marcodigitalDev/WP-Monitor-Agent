@@ -36,16 +36,27 @@ Parametros disponibles:
 
 ## Configuracion del actualizador GitHub
 
-Definir en wp-config.php:
+El plugin ya incluye estos valores por defecto segun el repositorio actual:
 
 ```php
-define( 'WP_MONITOR_AGENT_GITHUB_OWNER', 'usuario-o-organizacion' );
-define( 'WP_MONITOR_AGENT_GITHUB_REPO', 'wp-monitor-agent' );
+define( 'WP_MONITOR_AGENT_GITHUB_OWNER', 'marcodigitalDev' );
+define( 'WP_MONITOR_AGENT_GITHUB_REPO', 'WP-Monitor-Agent' );
 define( 'WP_MONITOR_AGENT_GITHUB_BRANCH', 'main' );
 define( 'WP_MONITOR_AGENT_GITHUB_TOKEN', '' );
 ```
 
-El token es opcional para repositorios publicos. Para repositorios privados puede ser necesario para consultar metadata y descargar el paquete.
+No necesitas definir nada extra en un sitio normal mientras el plugin siga publicandose desde ese mismo repositorio publico.
+
+Si necesitas sobreescribir esos valores en una instalacion concreta, puedes definirlos en wp-config.php antes de cargar WordPress:
+
+```php
+define( 'WP_MONITOR_AGENT_GITHUB_OWNER', 'marcodigitalDev' );
+define( 'WP_MONITOR_AGENT_GITHUB_REPO', 'WP-Monitor-Agent' );
+define( 'WP_MONITOR_AGENT_GITHUB_BRANCH', 'main' );
+define( 'WP_MONITOR_AGENT_GITHUB_TOKEN', '' );
+```
+
+El token es opcional para repositorios publicos. Para repositorios privados puede ser necesario para consultar metadata y descargar el paquete. La constante de branch queda disponible como configuracion futura, aunque el updater actual consulta GitHub Releases y no una rama concreta.
 
 ## Publicar una nueva version
 

@@ -18,6 +18,22 @@ define( 'WP_MONITOR_AGENT_PATH', plugin_dir_path( __FILE__ ) );
 define( 'WP_MONITOR_AGENT_URL', plugin_dir_url( __FILE__ ) );
 define( 'WP_MONITOR_AGENT_BASENAME', plugin_basename( __FILE__ ) );
 
+if ( ! defined( 'WP_MONITOR_AGENT_GITHUB_OWNER' ) ) {
+	define( 'WP_MONITOR_AGENT_GITHUB_OWNER', 'marcodigitalDev' );
+}
+
+if ( ! defined( 'WP_MONITOR_AGENT_GITHUB_REPO' ) ) {
+	define( 'WP_MONITOR_AGENT_GITHUB_REPO', 'WP-Monitor-Agent' );
+}
+
+if ( ! defined( 'WP_MONITOR_AGENT_GITHUB_BRANCH' ) ) {
+	define( 'WP_MONITOR_AGENT_GITHUB_BRANCH', 'main' );
+}
+
+if ( ! defined( 'WP_MONITOR_AGENT_GITHUB_TOKEN' ) ) {
+	define( 'WP_MONITOR_AGENT_GITHUB_TOKEN', '' );
+}
+
 require_once WP_MONITOR_AGENT_PATH . 'includes/class-wp-monitor-agent-checks.php';
 require_once WP_MONITOR_AGENT_PATH . 'includes/class-wp-monitor-agent-logs.php';
 require_once WP_MONITOR_AGENT_PATH . 'includes/class-wp-monitor-agent-rest-controller.php';
