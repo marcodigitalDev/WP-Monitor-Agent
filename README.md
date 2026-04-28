@@ -100,7 +100,7 @@ git push origin v1.0.1
   "success": true,
   "plugin": {
     "name": "WP Monitor Agent",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "slug": "wp-monitor-agent",
     "update_source": "github"
   },
