@@ -41,58 +41,6 @@ Headers de autenticacion soportados:
 - Authorization: Bearer TU_TOKEN
 - X-WP-Monitor-Token: TU_TOKEN
 
-## Configuracion del actualizador GitHub
-
-El plugin ya incluye estos valores por defecto segun el repositorio actual:
-
-```php
-define( 'WP_MONITOR_AGENT_GITHUB_OWNER', 'marcodigitalDev' );
-define( 'WP_MONITOR_AGENT_GITHUB_REPO', 'WP-Monitor-Agent' );
-define( 'WP_MONITOR_AGENT_GITHUB_BRANCH', 'main' );
-define( 'WP_MONITOR_AGENT_GITHUB_TOKEN', '' );
-```
-
-No necesitas definir nada extra en un sitio normal mientras el plugin siga publicandose desde ese mismo repositorio publico.
-
-Si necesitas sobreescribir esos valores en una instalacion concreta, puedes definirlos en wp-config.php antes de cargar WordPress:
-
-```php
-define( 'WP_MONITOR_AGENT_GITHUB_OWNER', 'marcodigitalDev' );
-define( 'WP_MONITOR_AGENT_GITHUB_REPO', 'WP-Monitor-Agent' );
-define( 'WP_MONITOR_AGENT_GITHUB_BRANCH', 'main' );
-define( 'WP_MONITOR_AGENT_GITHUB_TOKEN', '' );
-define( 'WP_MONITOR_AGENT_API_TOKEN', 'reemplaza-por-un-token-largo-y-aleatorio' );
-```
-
-El token es opcional para repositorios publicos. Para repositorios privados puede ser necesario para consultar metadata y descargar el paquete. La constante de branch queda disponible como configuracion futura, aunque el updater actual consulta GitHub Releases y no una rama concreta.
-
-## Publicar una nueva version
-
-1. Actualizar la version en el header del plugin.
-2. Actualizar la constante WP_MONITOR_AGENT_VERSION.
-3. Crear commit.
-4. Crear y subir tag:
-
-```bash
-git tag v1.0.1
-git push origin v1.0.1
-```
-
-1. GitHub Actions crea automaticamente el Release.
-2. GitHub Actions adjunta automaticamente el asset wp-monitor-agent.zip.
-3. El updater solo acepta ese asset para garantizar la carpeta wp-monitor-agent.
-4. WordPress detectara la actualizacion desde el panel de Plugins.
-
-## Seguridad
-
-- El endpoint requiere autenticacion.
-- Se admite token Bearer dedicado para integraciones maquina a maquina.
-- Se mantiene acceso para administradores autenticados (manage_options).
-- El plugin no expone credenciales ni variables de entorno.
-- El plugin no expone logs completos.
-- El plugin no modifica el sitio.
-- Se recomienda restringir acceso por IP desde Cloudflare o WAF si aplica.
-
 ## Ejemplo de respuesta reducida
 
 ```json
@@ -100,7 +48,7 @@ git push origin v1.0.1
   "success": true,
   "plugin": {
     "name": "WP Monitor Agent",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "slug": "wp-monitor-agent",
     "update_source": "github"
   },
@@ -129,9 +77,3 @@ git push origin v1.0.1
   "timezone": "Europe/Madrid"
 }
 ```
-
-## Notas operativas
-
-- n8n debe encargarse del historico, comparacion, alertas y reportes.
-- Este plugin solo expone diagnostico puntual y actualizacion nativa desde GitHub.
-- Para validar cache de pagina, conviene revisar headers externos como cf-cache-status, x-litespeed-cache, x-cache y cache-control desde n8n.
